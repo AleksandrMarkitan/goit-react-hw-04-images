@@ -1,40 +1,45 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
+
+import { Loader } from '../Loader/Loader';
 import s from '../Modal/Modal.module.scss';
-export class Modal extends Component {
-  closeByEsc = e => {
-    if (e.code === 'Escape') {
-      this.props.closeModal();
-    }
-  };
 
-  closeByBackdrop = e => {
+export const Modal = ({ closeModal, url }) => {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const closeByEsc = ({ code }) => {
+      if (code === 'Escape') {
+        closeModal();
+      }
+    };
+    window.addEventListener('keydown', closeByEsc);
+    return () => {
+      window.removeEventListener('keydown', closeByEsc);
+    };
+  }, [closeModal]);
+
+  const closeByBackdrop = e => {
     if (e.currentTarget === e.target) {
-      this.props.closeModal();
+      closeModal();
     }
   };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.closeByEsc);
-    window.addEventListener('click', this.closeByBackdrop);
-  }
+  const loadHandler = () => {
+    setLoaded(true);
+  };
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.closeByEsc);
-    window.removeEventListener('click', this.closeByBackdrop);
-  }
-
-  render() {
-    const { url } = this.props;
-    return (
-      <div className={s.overlay} onClick={this.closeByBackdrop}>
+  return (
+    <>
+      <div className={s.overlay} onClick={closeByBackdrop}>
         <div className={s.modal}>
-          <img src={url} alt="" />
+          {!loaded && <Loader />}
+          <img src={url} alt="" onLoad={loadHandler} />
         </div>
       </div>
-    );
-  }
-}
+    </>
+  );
+};
 
 Modal.propTypes = {
   url: PropTypes.string.isRequired,
