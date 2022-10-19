@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
-import { Loader } from '../Loader/Loader';
+import { LoaderInModal } from '../Loader/Loader';
 import s from '../Modal/Modal.module.scss';
 
 export const Modal = ({ closeModal, url }) => {
@@ -33,8 +33,13 @@ export const Modal = ({ closeModal, url }) => {
     <>
       <div className={s.overlay} onClick={closeByBackdrop}>
         <div className={s.modal}>
-          {!loaded && <Loader />}
-          <img src={url} alt="" onLoad={loadHandler} />
+          <img
+            src={url}
+            alt=""
+            onLoad={loadHandler}
+            style={{ display: loaded ? 'block' : 'none' }}
+          />
+          {!loaded && <LoaderInModal />}
         </div>
       </div>
     </>

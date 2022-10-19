@@ -18,3 +18,22 @@ export const Loader = () => {
     </div>
   );
 };
+
+export const LoaderInModal = () => {
+  return (
+    <div className={s.ldsSpinnerModal}>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  );
+};
